@@ -1,0 +1,756 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Attendance Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="1"/></pattern></defs><rect width="100" height="100" fill="url(%23grid)"/></svg>');
+            opacity: 0.3;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .header p {
+            font-size: 1.2em;
+            opacity: 0.9;
+            position: relative;
+            z-index: 1;
+        }
+
+        .stats-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+            background: #f8f9fa;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border-left: 4px solid #4facfe;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .stat-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.1em;
+        }
+
+        .stat-card .number {
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #4facfe;
+            margin-bottom: 5px;
+        }
+
+        .stat-card .label {
+            color: #666;
+            font-size: 0.9em;
+        }
+
+        .department-section {
+            padding: 30px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 1.8em;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .refresh-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .refresh-btn:active {
+            transform: translateY(0);
+        }
+
+        .department-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .department-card {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.08);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .department-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+
+        .department-header {
+            background: linear-gradient(135deg, #ff6b6b 0%, #feca57 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .department-header h3 {
+            font-size: 1.3em;
+            margin-bottom: 5px;
+        }
+
+        .department-header .dept-code {
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+
+        .department-content {
+            padding: 25px;
+        }
+
+        .attendance-bar {
+            margin-bottom: 20px;
+        }
+
+        .attendance-numbers {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 8px;
+        }
+
+        .present-count {
+            font-weight: bold;
+            color: #27ae60;
+        }
+
+        .total-count {
+            font-weight: bold;
+            color: #34495e;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #ecf0f1;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #27ae60, #2ecc71);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .progress-fill::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
+            animation: shimmer 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .attendance-percentage {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 1.1em;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+
+        .live-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #27ae60;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            z-index: 1000;
+        }
+
+        .live-dot {
+            width: 8px;
+            height: 8px;
+            background: white;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.5; }
+            100% { opacity: 1; }
+        }
+
+        .last-updated {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            font-size: 0.9em;
+            background: #f8f9fa;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #4facfe;
+            font-size: 1.1em;
+            background: #f8f9fa;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #4facfe;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .stats-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .department-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .section-header {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <div class="header">
+            <h1>Student Attendance Dashboard</h1>
+            <p>Real-time Department-wise Attendance Tracking</p>
+        </div>
+
+        <div class="stats-overview">
+            <div class="stat-card">
+                <h3>Total Students</h3>
+                <div class="number" id="totalStudents">0</div>
+                <div class="label">Enrolled</div>
+            </div>
+            <div class="stat-card">
+                <h3>Present Today</h3>
+                <div class="number" id="totalPresent">0</div>
+                <div class="label">Students</div>
+            </div>
+            <div class="stat-card">
+                <h3>Absent Today</h3>
+                <div class="number" id="totalAbsent">0</div>
+                <div class="label">Students</div>
+            </div>
+            <div class="stat-card">
+                <h3>Overall Attendance</h3>
+                <div class="number" id="overallPercentage">0%</div>
+                <div class="label">Rate</div>
+            </div>
+        </div>
+
+        <div class="department-section">
+            <div class="section-header">
+                <h2 class="section-title">Department-wise Attendance</h2>
+                <button class="refresh-btn" onclick="refreshData()">
+                    <span>🔄</span> Refresh Data
+                </button>
+            </div>
+            
+            <div class="department-grid" id="departmentGrid">
+                <!-- Department cards will be populated here -->
+            </div>
+        </div>
+
+        <div class="last-updated">
+            Last Updated: <span id="lastUpdated"></span>
+        </div>
+    </div>
+
+    <div class="live-indicator">
+        <div class="live-dot"></div>
+        <span>Live Updates</span>
+    </div>
+
+    <script>
+        // Google Sheets Configuration
+        const SHEET_ID = '1xWZYDY86aNMR9rIHdC6vVxMROKHgEZIXD8SB7oIissg';
+        const SHEET_GID = '365086767';
+        
+        // Student data processed from your Google Sheet
+        let studentData = [];
+
+        // Department colors
+        const departmentColors = [
+            'linear-gradient(135deg, #ff6b6b 0%, #feca57 100%)',
+            'linear-gradient(135deg, #4facfe 0%, #00f2fe 100%)',
+            'linear-gradient(135deg, #43e97b 0%, #38f9d7 100%)',
+            'linear-gradient(135deg, #fa709a 0%, #fee140 100%)',
+            'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)'
+        ];
+
+        function updateDashboard() {
+            const totalStudents = studentData.reduce((sum, dept) => sum + dept.total, 0);
+            const totalPresent = studentData.reduce((sum, dept) => sum + dept.present, 0);
+            const totalAbsent = totalStudents - totalPresent;
+            const overallPercentage = totalStudents > 0 ? Math.round((totalPresent / totalStudents) * 100) : 0;
+
+            // Update overview stats
+            document.getElementById('totalStudents').textContent = totalStudents;
+            document.getElementById('totalPresent').textContent = totalPresent;
+            document.getElementById('totalAbsent').textContent = totalAbsent;
+            document.getElementById('overallPercentage').textContent = overallPercentage + '%';
+
+            // Update department cards
+            const departmentGrid = document.getElementById('departmentGrid');
+            departmentGrid.innerHTML = '';
+
+            studentData.forEach((dept, index) => {
+                const percentage = dept.total > 0 ? Math.round((dept.present / dept.total) * 100) : 0;
+                const card = document.createElement('div');
+                card.className = 'department-card';
+                card.innerHTML = `
+                    <div class="department-header" style="background: ${departmentColors[index % departmentColors.length]}">
+                        <h3>${dept.department}</h3>
+                        <div class="dept-code">${dept.code}</div>
+                    </div>
+                    <div class="department-content">
+                        <div class="attendance-bar">
+                            <div class="attendance-numbers">
+                                <span class="present-count">${dept.present} Present</span>
+                                <span class="total-count">${dept.total} Total</span>
+                            </div>
+                            <div class="progress-bar">
+                                <div class="progress-fill" style="width: ${percentage}%"></div>
+                            </div>
+                        </div>
+                        <div class="attendance-percentage">${percentage}% Attendance</div>
+                    </div>
+                `;
+                departmentGrid.appendChild(card);
+            });
+
+            // Update last updated time
+            document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+        }
+
+        function refreshData() {
+            const button = document.querySelector('.refresh-btn');
+            button.style.transform = 'rotate(360deg)';
+            button.disabled = true;
+
+            // Fetch data from Google Sheets
+            fetchGoogleSheetsData().then(() => {
+                button.style.transform = 'rotate(0deg)';
+                button.disabled = false;
+            }).catch(error => {
+                console.error('Error refreshing data:', error);
+                button.style.transform = 'rotate(0deg)';
+                button.disabled = false;
+                showErrorMessage('Failed to refresh data. Please try again.');
+            });
+        }
+
+        // Auto-refresh every 30 seconds
+        setInterval(fetchGoogleSheetsData, 30000);
+
+        // Initial load
+        fetchGoogleSheetsData();
+
+        // Google Sheets Integration Functions
+        async function fetchGoogleSheetsData() {
+            try {
+                // Show loading state
+                document.getElementById('lastUpdated').innerHTML = '<div class="loading">Fetching live data...</div>';
+                
+                // Use CSV export method which works better for public sheets
+                const csvUrl = `https://docs.google.com/spreadsheets/d/${SHEET_ID}/export?format=csv&gid=${SHEET_GID}`;
+                
+                console.log('Fetching from URL:', csvUrl);
+                
+                // Try direct fetch first
+                let response;
+                try {
+                    response = await fetch(csvUrl, {
+                        method: 'GET',
+                        mode: 'cors',
+                        headers: {
+                            'Accept': 'text/csv',
+                        }
+                    });
+                } catch (corsError) {
+                    console.log('CORS error, trying with proxy...');
+                    // Use a CORS proxy as fallback
+                    const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(csvUrl)}`;
+                    response = await fetch(proxyUrl);
+                }
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                
+                const csvText = await response.text();
+                console.log('Fetched CSV data successfully');
+                console.log('First 500 characters:', csvText.substring(0, 500));
+                
+                processCSVData(csvText);
+                updateDashboard();
+                
+            } catch (error) {
+                console.error('Error fetching Google Sheets data:', error);
+                document.getElementById('lastUpdated').innerHTML = '<div style="color: #ff4757;">Error fetching data. Please try again.</div>';
+                // Try alternative method with JSON
+                await fetchAlternativeData();
+            }
+        }
+
+        async function fetchAlternativeData() {
+            try {
+                // Alternative method: Use Google Sheets JSON endpoint
+                const jsonUrl = `https://sheets.googleapis.com/v4/spreadsheets/${SHEET_ID}/values/Sheet1!A:J`;
+                
+                const response = await fetch(jsonUrl);
+                const data = await response.json();
+                
+                if (data.values) {
+                    processSheetData(data.values);
+                    updateDashboard();
+                } else {
+                    throw new Error('No data found in response');
+                }
+                
+            } catch (error) {
+                console.error('Alternative fetch method failed:', error);
+                showErrorMessage('Unable to fetch live data from Google Sheets. Please check if the sheet is publicly accessible.');
+            }
+        }
+
+        function processCSVData(csvText) {
+            try {
+                // Parse CSV more carefully
+                const lines = csvText.trim().split('\n');
+                console.log('Processing', lines.length, 'lines of CSV data');
+                
+                const students = [];
+                
+                // Skip header row, start from row 1
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i];
+                    if (!line.trim()) continue;
+                    
+                    // Split by comma but handle quoted fields
+                    const values = parseCSVLine(line);
+                    
+                    if (values.length >= 3) {
+                        const student = {
+                            registerNumber: values[0]?.trim(),
+                            name: values[1]?.trim(),
+                            department: values[2]?.trim(),
+                            attendance: values[4]?.trim() || '',
+                            isPresent: isStudentPresent(values)
+                        };
+                        
+                        console.log(`Student: ${student.name} (${student.department}) - Present: ${student.isPresent}`);
+                        
+                        if (student.department && student.department !== 'Department') {
+                            students.push(student);
+                        }
+                    }
+                }
+                
+                console.log('Processed', students.length, 'students');
+                console.log('Sample students:', students.slice(0, 5));
+                groupStudentsByDepartment(students);
+                
+            } catch (error) {
+                console.error('Error processing CSV data:', error);
+                throw error;
+            }
+        }
+
+        function processSheetData(rows) {
+            try {
+                const students = [];
+                
+                // Skip header row
+                for (let i = 1; i < rows.length; i++) {
+                    const row = rows[i];
+                    if (row.length >= 3) {
+                        const student = {
+                            registerNumber: row[0]?.trim(),
+                            name: row[1]?.trim(),
+                            department: row[2]?.trim(),
+                            attendance: row[4]?.trim() || '',
+                            isPresent: isStudentPresent(row)
+                        };
+                        
+                        if (student.department && student.department !== 'Department') {
+                            students.push(student);
+                        }
+                    }
+                }
+                
+                console.log('Processed', students.length, 'students from sheet data');
+                groupStudentsByDepartment(students);
+                
+            } catch (error) {
+                console.error('Error processing sheet data:', error);
+                throw error;
+            }
+        }
+
+        function isStudentPresent(values) {
+            // Check if student is present based on attendance data
+            // Looking for "Present ✓" or similar patterns in the attendance columns
+            for (let i = 4; i < values.length; i++) {
+                const value = values[i]?.trim() || '';
+                console.log(`Checking value ${i}: "${value}"`);
+                
+                // Check for various present indicators
+                if (value.includes('Present') || 
+                    value.includes('✓') || 
+                    value.includes('âœ…') || // Encoded checkmark
+                    value.includes('✅') ||
+                    value.includes('âœ…')) {
+                    console.log(`Student marked as present: "${value}"`);
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        function parseCSVLine(line) {
+            const values = [];
+            let current = '';
+            let inQuotes = false;
+            
+            for (let i = 0; i < line.length; i++) {
+                const char = line[i];
+                
+                if (char === '"') {
+                    inQuotes = !inQuotes;
+                } else if (char === ',' && !inQuotes) {
+                    values.push(current.replace(/^"|"$/g, ''));
+                    current = '';
+                } else {
+                    current += char;
+                }
+            }
+            
+            values.push(current.replace(/^"|"$/g, ''));
+            return values;
+        }
+
+        function groupStudentsByDepartment(students) {
+            const departmentMap = new Map();
+            
+            students.forEach(student => {
+                if (!student.department) return;
+                
+                if (!departmentMap.has(student.department)) {
+                    departmentMap.set(student.department, {
+                        department: student.department,
+                        code: generateDepartmentCode(student.department),
+                        total: 0,
+                        present: 0
+                    });
+                }
+                
+                const dept = departmentMap.get(student.department);
+                dept.total++;
+                if (student.isPresent) {
+                    dept.present++;
+                    console.log(`Marking ${student.name} as present in ${student.department}`);
+                }
+            });
+            
+            studentData = Array.from(departmentMap.values());
+            console.log('Department data:', studentData);
+            
+            // Log total counts
+            const totalStudents = studentData.reduce((sum, dept) => sum + dept.total, 0);
+            const totalPresent = studentData.reduce((sum, dept) => sum + dept.present, 0);
+            console.log(`Total students: ${totalStudents}, Total present: ${totalPresent}`);
+        }
+
+        function showErrorMessage(message) {
+            const errorDiv = document.createElement('div');
+            errorDiv.style.cssText = `
+                position: fixed;
+                top: 70px;
+                right: 20px;
+                background: #ff4757;
+                color: white;
+                padding: 15px;
+                border-radius: 10px;
+                z-index: 1001;
+                max-width: 300px;
+                box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            `;
+            errorDiv.textContent = message;
+            document.body.appendChild(errorDiv);
+            
+            setTimeout(() => {
+                errorDiv.remove();
+            }, 5000);
+        }
+
+        function generateDepartmentCode(department) {
+            const codeMap = {
+                'Computer Science': 'CS',
+                'Electronics': 'ECE',
+                'Physics': 'PHY',
+                'Mathematics': 'MATH',
+                'English': 'ENG',
+                'Hindi': 'HIN',
+                'Sanskrit': 'SAN',
+                'History': 'HIST',
+                'Economics': 'ECO',
+                'Commerce': 'COM',
+                'Statistics': 'STAT',
+                'Data Science': 'DS',
+                'Chemistry': 'CHEM',
+                'Social Work': 'SW',
+                'Computer Application': 'CA',
+                'Physical Education': 'PE',
+                'Political Science': 'PS',
+                'Botany': 'BOT',
+                'Zoology': 'ZOO',
+                'Psychology': 'PSY',
+                'Management Studies': 'MS',
+                'Malayalam': 'MAL',
+                'Criminology and Police Science': 'CPS',
+                'Forensic Science': 'FS',
+                'Media Studies': 'MEDIA'
+            };
+            
+            return codeMap[department] || department.substring(0, 3).toUpperCase();
+        }
+
+        // Debug function to test the connection
+        function testGoogleSheetsConnection() {
+            console.log('Testing Google Sheets connection...');
+            fetchGoogleSheetsData();
+        }
+
+        // Add this to test the connection
+        window.testConnection = testGoogleSheetsConnection;
+        
+        // Add a function to manually test data processing
+        function testDataProcessing() {
+            console.log('Testing data processing with sample data...');
+            const sampleCSV = `Register Number,Name,Department,Barcode,Attendence,,,,Is Present
+THAXBOA001,Yash Kumar,History,*THAXBOA001*,Present âœ…,19:47:08,Present âœ…,19:49:14,0
+THAXBOA002,Tara Verma,Sanskrit,*THAXBOA002*,Present âœ…,19:45:59,Present âœ…,19:46:27,
+THAXBOA003,Neha Kumar,Management Studies,*THAXBOA003*,,,,,`;
+            
+            processCSVData(sampleCSV);
+        }
+        
+        window.testDataProcessing = testDataProcessing;
+    </script>
+</body>
+</html>
