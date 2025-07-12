@@ -11,6 +11,7 @@
             padding: 0;
             background-color: #f0f8ff;
             text-align: center;
+            position: relative;
         }
         .college-name {
             font-size: clamp(1.5em, 5vw, 2.5em);
@@ -80,9 +81,33 @@
                 font-size: 1.2em;
             }
         }
+
+        /* Style for the floating action button */
+        .fab {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            width: 50px;
+            height: 50px;
+            background-color: #ffffff;
+            border: 2px solid #0066cc;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1em;
+            color: #0066cc;
+            text-decoration: none;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .fab:hover {
+            background-color: #e6f3ff;
+        }
     </style>
 </head>
 <body>
+    <a href="total.html" class="fab">Total</a>
     <div class="college-name">ST. THOMAS COLLEGE AUTONOMOUS THRISSUR</div>
     <div class="ceremony-name">Laurea 2025 Convocation Ceremony</div>
 
