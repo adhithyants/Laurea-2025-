@@ -12,6 +12,7 @@
             background-color: #f0f8ff;
             text-align: center;
             position: relative;
+            min-height: 100vh;
         }
         .college-name {
             font-size: clamp(1.5em, 5vw, 2.5em);
@@ -33,6 +34,7 @@
             margin: 15px auto;
             max-width: 900px;
             padding: 0 10px;
+            padding-bottom: 70px; /* Added to ensure space for FABs */
         }
         .day {
             flex: 1;
@@ -41,6 +43,8 @@
             padding: 15px;
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            padding-bottom: 70px; /* Extra padding to avoid overlap with FAB */
         }
         .day h2 {
             font-size: clamp(1em, 3vw, 1.2em);
@@ -80,13 +84,14 @@
             .ceremony-name {
                 font-size: 1.2em;
             }
+            .fab {
+                bottom: 20px !important;
+            }
         }
 
-        /* Style for the floating action button */
+        /* Style for the floating action buttons */
         .fab {
             position: fixed;
-            bottom: 20px;
-            left: 20px;
             width: 50px;
             height: 50px;
             background-color: #ffffff;
@@ -104,10 +109,17 @@
         .fab:hover {
             background-color: #e6f3ff;
         }
+        .fab.day1 {
+            bottom: 20px;
+            left: 20px;
+        }
+        .fab.day2 {
+            bottom: 20px;
+            right: 20px;
+        }
     </style>
 </head>
 <body>
-    <a href="total.html" class="fab">Total</a>
     <div class="college-name">ST. THOMAS COLLEGE AUTONOMOUS THRISSUR</div>
     <div class="ceremony-name">Laurea 2025 Convocation Ceremony</div>
 
@@ -138,11 +150,12 @@
                     <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=326068135#gid=326068135" target="_blank">B.Sc. Physics</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=814467132#gid=814467132" target="_blank">B.Sc. Statistics</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=289070841#gid=289070841" target="_blank">B.Sc. Zoology</a></li>
-                    <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=906811237#gid=906811237" target="_blank">B.Voc. Data Science </a></li>
-                    <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=1738147030#gid=1738147030" target="_blank">B.Voc. Forensic Science </a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=906811237#gid=906811237" target="_blank">B.Voc. Data Science</a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=1738147030#gid=1738147030" target="_blank">B.Voc. Forensic Science</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=330896435#gid=330896435" target="_blank">Special Category</a></li>
                 </ul>
             </div>
+            <a href="https://docs.google.com/spreadsheets/d/1yvabUy_zaBKUt6zSzvKVZ3CuRCw8GOQPXji_qxkTlrg/edit?gid=24399291#gid=24399291" class="fab day1" target="_blank">Total</a>
         </div>
         <div class="day">
             <h2>Day 2 - Tuesday, July 15, 2025</h2>
@@ -154,20 +167,21 @@
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=2066622713#gid=2066622713" target="_blank">M.A. Visual Communication</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=347479608#gid=347479608" target="_blank">Master of Commerce</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=550437935#gid=550437935" target="_blank">Master of Social Work</a></li>
-                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1011133275#gid=1011133275" target="_blank">B.A. Criminology and Police Science </a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1011133275#gid=1011133275" target="_blank">B.A. Criminology and Police Science</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1389695209#gid=1389695209" target="_blank">B.A. Economics</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=735012770#gid=735012770" target="_blank">B.A. English Language and Literature</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=2144696858#gid=2144696858" target="_blank">B.A. English and History</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1407061791#gid=1407061791" target="_blank">B.A. Multimedia</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1278270782#gid=1278270782" target="_blank">B.A. Visual Communication</a></li>
-                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1576190043#gid=1576190043" target="_blank">Bachelor of Business Administration </a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1576190043#gid=1576190043" target="_blank">Bachelor of Business Administration</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=633122823#gid=633122823" target="_blank">B.Com. Banking and Insurance [1 CB]</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=800574148#gid=800574148" target="_blank">B.Com. Finance [Aided] [1 CF]</a></li>
-                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=509777258#gid=509777258" target="_blank">B.Com. Finance [Self Finance] [2 CF]	</a></li>
+                    <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=509777258#gid=509777258" target="_blank">B.Com. Finance [Self Finance] [2 CF]</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=812530544#gid=812530544" target="_blank">B.Com. Taxation [2 CT]</a></li>
                     <li><a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?gid=1722844340#gid=1722844340" target="_blank">Special Category</a></li>
                 </ul>
             </div>
+            <a href="https://docs.google.com/spreadsheets/d/1hCsEMop925pgO4yqc54_VHdVTSkGwg66wEx_xf7WhgY/edit?usp=sharing" class="fab day2" target="_blank">Total</a>
         </div>
     </div>
 </body>
